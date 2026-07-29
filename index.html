@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Fracture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1c1a17;
+    --charcoal-2:#151310;
+    --concrete:#a49b8c;
+    --concrete-dim:#5c574c;
+    --rust:#b7602e;
+    --rust-bright:#d97a3f;
+    --patina:#7fa39b;
+    --bone:#ece4d3;
+    --bone-dim:#c9beac;
+    --crack-line: rgba(236,228,211,0.18);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--charcoal);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--rust); color:var(--bone); }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--rust-bright);
+  }
+
+  h1,h2,h3{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-weight:600;
+  }
+
+  /* subtle grain texture over everything */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:999;
+    pointer-events:none;
+    opacity:0.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.4rem clamp(1.5rem,5vw,4rem);
+    background:linear-gradient(180deg, rgba(21,19,16,0.9), rgba(21,19,16,0));
+    backdrop-filter:blur(2px);
+  }
+  .nav-mark{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size:1rem;
+    letter-spacing:0.08em;
+  }
+  .nav-mark span{ color:var(--rust-bright); }
+  .nav-cta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    border:1px solid var(--concrete-dim);
+    padding:0.5rem 1rem;
+    transition:border-color 0.25s, color 0.25s;
+  }
+  .nav-cta:hover{ border-color:var(--rust-bright); color:var(--rust-bright); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    align-items:stretch;
+  }
+  .hero-text{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:1.6rem;
+    padding:8rem clamp(1.5rem,6vw,5rem) 4rem;
+    position:relative;
+  }
+  .hero-title{
+    font-size:clamp(3rem, 8vw, 6rem);
+    line-height:0.94;
+  }
+  .hero-title .crack{
+    display:inline-block;
+    color:transparent;
+    -webkit-text-stroke:1.5px var(--concrete);
+  }
+  .hero-sub{
+    max-width:32ch;
+    color:var(--bone-dim);
+    font-size:1.05rem;
+    line-height:1.6;
+  }
+  .hero-actions{
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+    margin-top:0.5rem;
+  }
+  .btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:0.9rem 1.6rem;
+    border:1px solid var(--rust);
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    transition:transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  }
+  .btn-primary{
+    background:var(--rust);
+    color:var(--charcoal-2);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); background:var(--rust-bright); }
+  .btn-ghost{ color:var(--bone); border-color:var(--concrete-dim); }
+  .btn-ghost:hover{ border-color:var(--patina); color:var(--patina); transform:translateY(-2px); }
+
+  .hero-art{
+    position:relative;
+    overflow:hidden;
+    border-left:1px solid rgba(236,228,211,0.08);
+  }
+  .hero-art img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    filter:saturate(1.05) contrast(1.05);
+  }
+  .hero-art::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(90deg, var(--charcoal) 0%, transparent 18%);
+  }
+
+  /* fracture line signature element - runs down between/through sections */
+  .fault{
+    position:relative;
+    height:140px;
+    width:100%;
+  }
+  .fault svg{ width:100%; height:100%; display:block; }
+  .fault path{
+    fill:none;
+    stroke:var(--crack-line);
+    stroke-width:1.5;
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    animation:draw 2.4s ease forwards;
+    animation-play-state:paused;
+  }
+  .fault.in-view path{ animation-play-state:running; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  /* ---------- statement / about ---------- */
+  .statement{
+    padding:2rem clamp(1.5rem,6vw,5rem) 8rem;
+    max-width:920px;
+  }
+  .statement h2{
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    margin-bottom:1.6rem;
+  }
+  .statement p{
+    color:var(--bone-dim);
+    font-size:1.05rem;
+    line-height:1.85;
+    max-width:60ch;
+  }
+  .statement p + p{ margin-top:1.1rem; }
+  .statement .accent{ color:var(--patina); }
+
+  /* ---------- banner strip (image 1) ---------- */
+  .banner{
+    position:relative;
+    width:100%;
+    height:clamp(220px, 32vw, 420px);
+    overflow:hidden;
+    border-top:1px solid rgba(236,228,211,0.08);
+    border-bottom:1px solid rgba(236,228,211,0.08);
+  }
+  .banner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 30%;
+    filter:brightness(0.75) saturate(1.05);
+  }
+  .banner-label{
+    position:absolute;
+    bottom:1.6rem; left:clamp(1.5rem,6vw,5rem);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--bone);
+    background:rgba(21,19,16,0.55);
+    padding:0.5rem 0.9rem;
+    border:1px solid rgba(236,228,211,0.25);
+  }
+
+  /* ---------- tracklist ---------- */
+  .tracks{
+    padding:6rem clamp(1.5rem,6vw,5rem) 7rem;
+  }
+  .tracks-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin-bottom:2.5rem;
+    border-bottom:1px solid var(--concrete-dim);
+    padding-bottom:1.4rem;
+  }
+  .tracks-head h2{ font-size:clamp(1.8rem,4vw,2.6rem); }
+  .tracks-head .meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--bone-dim);
+    letter-spacing:0.05em;
+  }
+
+  .track-list{ list-style:none; }
+  .track{
+    display:grid;
+    grid-template-columns:3.5rem 1fr auto;
+    align-items:center;
+    gap:1.2rem;
+    padding:1.3rem 0;
+    border-bottom:1px solid rgba(164,155,140,0.22);
+    transition:padding-left 0.3s ease;
+  }
+  .track:hover{ padding-left:0.6rem; }
+  .track-num{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--rust-bright);
+    font-size:0.95rem;
+  }
+  .track-name{
+    font-family:'Oswald', sans-serif;
+    font-size:clamp(1.15rem,2.4vw,1.6rem);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+  .track-link{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    white-space:nowrap;
+    opacity:0;
+    transform:translateX(-6px);
+    transition:opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  }
+  .track:hover .track-link{ opacity:1; transform:translateX(0); color:var(--patina); }
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:4rem clamp(1.5rem,6vw,5rem) 3rem;
+    border-top:1px solid rgba(236,228,211,0.1);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:1.5rem;
+  }
+  footer .nav-mark{ font-size:0.95rem; }
+  footer .foot-links{
+    display:flex;
+    gap:1.6rem;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+  }
+  footer .foot-links a{ transition:color 0.25s ease; }
+  footer .foot-links a:hover{ color:var(--rust-bright); }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns:1fr; }
+    .hero-art{ height:60vh; order:-1; border-left:none; border-bottom:1px solid rgba(236,228,211,0.08); }
+    .hero-art::after{ background:linear-gradient(0deg, var(--charcoal) 0%, transparent 22%); }
+    .hero-text{ padding-top:2.5rem; }
+    .track{ grid-template-columns:2.5rem 1fr; }
+    .track-link{ grid-column:2; opacity:0.7; transform:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .fault path{ animation:none; stroke-dashoffset:0; }
+    .track, .btn{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark">OPEN <span>FRACTURE</span></div>
+  <a class="nav-cta" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Listen</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <span class="eyebrow">Alt Heavy Rock — Debut EP</span>
+    <h1 class="hero-title">OPEN<br><span class="crack">FRACTURE</span></h1>
+    <p class="hero-sub">Six songs about the break, the rust, and what keeps standing after. Heavy, honest, built from the crack up.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Listen on Spotify →</a>
+      <a class="btn btn-ghost" href="#tracks">See the EP</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="cover.png" alt="Open Fracture EP cover art — a cracked concrete wall giving way to weathered, rusted metal">
+  </div>
+</section>
+
+<div class="fault">
+  <svg viewBox="0 0 1200 140" preserveAspectRatio="none">
+    <path d="M0,20 L140,20 L165,55 L150,80 L210,75 L240,110 L320,105 L355,40 L430,45 L470,90 L560,85 L600,15 L680,20 L710,65 L790,60 L830,100 L920,95 L960,30 L1050,35 L1200,20"></path>
+  </svg>
+</div>
+
+<section class="statement">
+  <h2>Beautiful yet <span class="accent">breakable</span>.</h2>
+  <p>Open Fracture writes heavy rock for the moment right after something gives way — the wall still standing with the crack showing, the metal still holding with the rust showing through. It's music for people who've been broken and kept moving anyway.</p>
+  <p>The debut EP runs six tracks, from the defiance of opener <em>I'm Still Standing Here</em> to the closing question of <em>Is It Not Enough</em> — a record about damage that doesn't get the last word.</p>
+</section>
+
+<div class="banner">
+  <img src="banner.png" alt="Open Fracture band artwork with EP tracklist over a cracked, rusted wall texture">
+  <div class="banner-label">Debut EP · Out Now</div>
+</div>
+
+<section class="tracks" id="tracks">
+  <div class="tracks-head">
+    <h2>EP Tracklist</h2>
+    <span class="meta">6 tracks · Streaming everywhere</span>
+  </div>
+  <ul class="track-list">
+    <li class="track">
+      <span class="track-num">01</span>
+      <span class="track-name">I'm Still Standing Here</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+    <li class="track">
+      <span class="track-num">02</span>
+      <span class="track-name">Beautiful Yet Breakable</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+    <li class="track">
+      <span class="track-num">03</span>
+      <span class="track-name">Stronger Together</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+    <li class="track">
+      <span class="track-num">04</span>
+      <span class="track-name">Free From It All</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+    <li class="track">
+      <span class="track-num">05</span>
+      <span class="track-name">Edge of Everything</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+    <li class="track">
+      <span class="track-num">06</span>
+      <span class="track-name">Is It Not Enough</span>
+      <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+  </ul>
+</section>
+
+<footer>
+  <div class="nav-mark">OPEN <span style="color:var(--rust-bright)">FRACTURE</span></div>
+  <div class="foot-links">
+    <a href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Spotify</a>
+    <span style="color:var(--concrete-dim)">© 2026 Open Fracture</span>
+  </div>
+</footer>
+
+<script>
+  const fault = document.querySelector('.fault');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ fault.classList.add('in-view'); io.disconnect(); } });
+  }, { threshold: 0.4 });
+  io.observe(fault);
+</script>
+
+</body>
+</html>
