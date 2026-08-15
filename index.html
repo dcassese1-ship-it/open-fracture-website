@@ -287,6 +287,60 @@
   }
   .track:hover .track-link{ opacity:1; transform:translateX(0); color:var(--patina); }
 
+  /* ---------- the fracture (film) ---------- */
+  .fracture{
+    padding:6rem clamp(1.5rem,6vw,5rem) 7rem;
+  }
+  .fracture-head{
+    margin-bottom:2.5rem;
+    border-bottom:1px solid var(--concrete-dim);
+    padding-bottom:1.4rem;
+  }
+  .fracture-head h2{ font-size:clamp(1.8rem,4vw,2.6rem); margin-top:0.6rem; }
+  .fracture-sub{
+    color:var(--bone-dim);
+    font-size:1.05rem;
+    line-height:1.7;
+    max-width:60ch;
+    margin-top:1rem;
+  }
+  .video-wrap{
+    position:relative;
+    width:100%;
+    max-width:960px;
+    aspect-ratio:16/9;
+    margin:2.5rem 0 3.5rem;
+    border:1px solid rgba(236,228,211,0.15);
+    background:var(--charcoal-2);
+    overflow:hidden;
+  }
+  .video-wrap iframe{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    border:0;
+  }
+  .act-list{ list-style:none; max-width:720px; }
+  .act{
+    display:grid;
+    grid-template-columns:4.5rem 1fr;
+    align-items:baseline;
+    gap:1.2rem;
+    padding:1.1rem 0;
+    border-bottom:1px solid rgba(164,155,140,0.22);
+  }
+  .act-num{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--patina);
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+  }
+  .act-name{
+    font-family:'Oswald', sans-serif;
+    font-size:clamp(1.05rem,2.2vw,1.3rem);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+
   /* ---------- footer ---------- */
   footer{
     padding:4rem clamp(1.5rem,6vw,5rem) 3rem;
@@ -399,6 +453,43 @@
       <span class="track-num">06</span>
       <span class="track-name">Is It Not Enough</span>
       <a class="track-link" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Play on Spotify →</a>
+    </li>
+  </ul>
+</section>
+
+<section class="fracture" id="fracture">
+  <div class="fracture-head">
+    <span class="eyebrow">Dystopian Rock Opera Film</span>
+    <h2>The Fracture</h2>
+    <p class="fracture-sub">A six-act film built from the EP — the same story of breaking and holding, told in six movements.</p>
+  </div>
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/f66RvVlzNAw" title="The Fracture — dystopian rock opera film" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+  </div>
+  <ul class="act-list">
+    <li class="act">
+      <span class="act-num">ACT I</span>
+      <span class="act-name">Beautiful Yet Breakable</span>
+    </li>
+    <li class="act">
+      <span class="act-num">ACT II</span>
+      <span class="act-name">Is It Not Enough</span>
+    </li>
+    <li class="act">
+      <span class="act-num">ACT III</span>
+      <span class="act-name">Free From It All</span>
+    </li>
+    <li class="act">
+      <span class="act-num">ACT IV</span>
+      <span class="act-name">I'm Still Standing Here</span>
+    </li>
+    <li class="act">
+      <span class="act-num">ACT V</span>
+      <span class="act-name">Stronger Together</span>
+    </li>
+    <li class="act">
+      <span class="act-num">ACT VI</span>
+      <span class="act-name">Edge of Everything</span>
     </li>
   </ul>
 </section>
