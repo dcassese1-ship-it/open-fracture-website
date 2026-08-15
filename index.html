@@ -259,7 +259,7 @@
   }
   .track:hover .track-link{ opacity:1; transform:translateX(0); color:var(--patina); }
 
-  /* ---------- the fracture (film) ---------- */
+  /* ---------- the fracture ---------- */
   .fracture{
     padding:6rem clamp(1.5rem,6vw,5rem) 7rem;
   }
@@ -311,6 +311,29 @@
     font-size:clamp(1.05rem,2.2vw,1.3rem);
     text-transform:uppercase;
     letter-spacing:0.01em;
+  }
+  .fracture-copy{ max-width:64ch; }
+  .fracture-copy p + p{ margin-top:1.1rem; }
+  .fracture-quote{
+    margin:2.2rem 0 2.8rem;
+    padding-left:1.4rem;
+    border-left:2px solid var(--rust);
+    font-family:'Oswald', sans-serif;
+    font-weight:500;
+    font-size:clamp(1.3rem,2.6vw,1.8rem);
+    line-height:1.35;
+    color:var(--patina);
+    max-width:52ch;
+  }
+  .fracture-actions{
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+    margin:0 0 3.5rem;
+  }
+  .fracture-acts h3{
+    font-size:clamp(1.3rem,2.6vw,1.7rem);
+    margin-bottom:1.2rem;
   }
 
   /* ---------- footer ---------- */
@@ -387,39 +410,51 @@
 
 <section class="fracture" id="fracture">
   <div class="fracture-head">
-    <span class="eyebrow">Dystopian Rock Opera Film</span>
-    <h2>The Fracture</h2>
-    <p class="fracture-sub">A six-act film built from the EP — the same story of breaking and holding, told in six movements.</p>
+    <span class="eyebrow">Dystopian Rock Opera</span>
+    <h2>The world didn't end.<br>It fractured.</h2>
   </div>
+  <div class="fracture-copy">
+    <p class="fracture-sub">People became isolated. Communities disappeared. The systems meant to protect society became the systems that controlled it. Eventually, people stopped believing anything could change.</p>
+    <p class="fracture-sub">One man sends a message into the silence: I'm here. Someone hears it. Then another. What begins as one person's struggle to survive becomes something larger — a story about scars, isolation, guilt, survival, and connection.</p>
+    <p class="fracture-sub">Told entirely through the six songs of the EP, performed by Open Fracture, with no narrator telling you what to see or believe. The rest of the story happens in your imagination.</p>
+  </div>
+  <blockquote class="fracture-quote">"Is it enough to believe? Or eventually, do we have to make a stand?"</blockquote>
   <div class="video-wrap">
-    <iframe src="https://www.youtube.com/embed/f66RvVlzNAw" title="The Fracture — dystopian rock opera film" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+    <iframe src="https://www.youtube.com/embed/f66RvVlzNAw" title="The Fracture — dystopian rock opera" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
   </div>
-  <ul class="act-list">
-    <li class="act">
-      <span class="act-num">ACT I</span>
-      <span class="act-name">Beautiful Yet Breakable</span>
-    </li>
-    <li class="act">
-      <span class="act-num">ACT II</span>
-      <span class="act-name">Is It Not Enough</span>
-    </li>
-    <li class="act">
-      <span class="act-num">ACT III</span>
-      <span class="act-name">Free From It All</span>
-    </li>
-    <li class="act">
-      <span class="act-num">ACT IV</span>
-      <span class="act-name">I'm Still Standing Here</span>
-    </li>
-    <li class="act">
-      <span class="act-num">ACT V</span>
-      <span class="act-name">Stronger Together</span>
-    </li>
-    <li class="act">
-      <span class="act-num">ACT VI</span>
-      <span class="act-name">Edge of Everything</span>
-    </li>
-  </ul>
+  <div class="fracture-actions">
+    <a class="btn btn-primary" href="https://www.youtube.com/watch?v=f66RvVlzNAw" target="_blank" rel="noopener">Watch on YouTube →</a>
+    <a class="btn btn-ghost" href="https://open.spotify.com/artist/7I3XDXjscC9Qx6OGOtoVEt?si=4Ukw0ZPjT-aoKIyxm4TYVw" target="_blank" rel="noopener">Listen on Spotify</a>
+  </div>
+  <div class="fracture-acts">
+    <h3>Six Acts</h3>
+    <ul class="act-list">
+      <li class="act">
+        <span class="act-num">ACT I</span>
+        <span class="act-name">Beautiful Yet Breakable</span>
+      </li>
+      <li class="act">
+        <span class="act-num">ACT II</span>
+        <span class="act-name">Is It Not Enough</span>
+      </li>
+      <li class="act">
+        <span class="act-num">ACT III</span>
+        <span class="act-name">Free From It All</span>
+      </li>
+      <li class="act">
+        <span class="act-num">ACT IV</span>
+        <span class="act-name">I'm Still Standing Here</span>
+      </li>
+      <li class="act">
+        <span class="act-num">ACT V</span>
+        <span class="act-name">Stronger Together</span>
+      </li>
+      <li class="act">
+        <span class="act-num">ACT VI</span>
+        <span class="act-name">Edge of Everything</span>
+      </li>
+    </ul>
+  </div>
 </section>
 
 <section class="tracks" id="tracks">
